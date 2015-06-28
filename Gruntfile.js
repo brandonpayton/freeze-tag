@@ -8,7 +8,7 @@ module.exports = function (grunt) {
       },
       dist: {
         files: {
-          'built/server/main.js': 'src/server/main.js'
+          'build/server/main.js': 'src/server/main.js'
         }
       }
     },
@@ -22,15 +22,15 @@ module.exports = function (grunt) {
           ]
         },
         files: {
-          'built/client/main.js': 'src/client/main.js',
-          'built/client/editor.js': 'src/client/editor.js'
+          'build/client/main.js': 'src/client/main.js',
+          'build/client/editor.js': 'src/client/editor.js'
         }
       }
     },
     copy: {
       resources: {
         files: [
-          { expand: true, cwd: 'src/', src: '**/*.html', dest: 'built/' }
+          { expand: true, cwd: 'src/', src: '**/*.html', dest: 'build/' }
         ]
       }
     },
@@ -55,7 +55,7 @@ module.exports = function (grunt) {
     less: {
       main: {
         files: {
-          'built/client/resources/main.css': 'src/client/resources/main.less'
+          'build/client/resources/main.css': 'src/client/resources/main.less'
         }
       }
     }
