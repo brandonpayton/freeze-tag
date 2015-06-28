@@ -12,7 +12,7 @@ var mapsDir = path.resolve(path.join(__dirname, '..', '..', 'maps'));
 // TODO: Unit test all these handlers
 //
 
-app.get('/', express.static(path.join(__dirname, '..', 'client')));
+app.use(express.static(path.join(__dirname, '..', '..', 'build', 'client')));
 
 app.get('/maps', function (req, res) {
     fs.readdir(mapsDir).then(function (fileNames) {
@@ -63,4 +63,5 @@ app.put('/maps/:id', jsonParser, function (req, res) {
 
 app.listen(7777, function () {
   console.log('Ready');
+  console.log(path.join(__dirname, '..', '..', 'build', 'client'));
 });

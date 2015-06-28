@@ -22,8 +22,8 @@ module.exports = function (grunt) {
           ]
         },
         files: {
-          'build/client/main.js': 'src/client/main.js',
-          'build/client/editor.js': 'src/client/editor.js'
+          'build/client/main.js': 'src/client/main.jsx',
+          'build/client/editor.js': 'src/client/editor.jsx'
         }
       }
     },
