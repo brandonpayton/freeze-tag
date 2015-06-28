@@ -1,4 +1,6 @@
 module.exports = function (grunt) {
+  var babelify = require('babelify');
+
   grunt.initConfig({
     'babel': {
       options: {
@@ -13,7 +15,11 @@ module.exports = function (grunt) {
     browserify: {
       dist: {
         options: {
-          transform: [ 'babelify' ]
+          transform: [
+            babelify.configure({
+              optional: [ 'react' ]
+            })
+          ]
         },
         files: {
           'built/client/main.js': 'src/client/main.js',
