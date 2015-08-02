@@ -13,8 +13,8 @@ var runWebpack = function (kwArgs) {
         { test: /\.jsx?$/, exclude: /node_modules/, loader: 'babel?experimental&optional=runtime' }
       ]
     },
+
     entry: {
-      // TODO: Is there a way to keep client/main.js and server/main.js here instead of renaming to game.js and server.js?
       'game': './main.jsx',
       'editor': './editor.jsx'
     },
