@@ -59,7 +59,7 @@ class MapCanvas extends React.Component {
   }
 
   draw() {
-    let { map, proposedWall } = this.props;
+    let { map, proposedWall, gridShown } = this.props;
     let { numColumns, numRows } = map;
     let { canvas } = this.refs;
     let { width, height } = canvas;
@@ -93,23 +93,25 @@ class MapCanvas extends React.Component {
       );
     }
 
-    context.beginPath();
+    if (gridShown) {
+      context.beginPath();
 
-    for (let i = 0; i <= numColumns; ++i) {
-      let x = i * columnWidth;
-      context.moveTo(x, 0);
-      context.lineTo(x, canvas.height);
+      for (let i = 0; i <= numColumns; ++i) {
+        let x = i * columnWidth;
+        context.moveTo(x, 0);
+        context.lineTo(x, canvas.height);
+      }
+
+      for (let i = 0; i <= numRows; ++i) {
+        let y = i * rowHeight;
+        context.moveTo(0, y);
+        context.lineTo(canvas.width, y);
+      }
+
+      context.strokeStyle = 'gray';
+      context.stroke();
+      context.closePath();
     }
-
-    for (let i = 0; i <= numRows; ++i) {
-      let y = i * rowHeight;
-      context.moveTo(0, y);
-      context.lineTo(canvas.width, y);
-    }
-
-    context.strokeStyle = 'gray';
-    context.stroke();
-    context.closePath();
   }
 }
 

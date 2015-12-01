@@ -16,7 +16,8 @@ import {
   ABORT_PROPOSED_WALL,
 	UNDO,
 	REDO,
-  SELECT_TOOL,
+  SHOW_GRID,
+  SELECT_TOOL
 } from './actions';
 
 function normalizeProposedWall(wallPoints) {
@@ -84,6 +85,9 @@ export default combineReducers({
   }, null),
   view: combineReducers({
     edit: combineReducers({
+      gridShown: handleActions({
+        [SHOW_GRID]: (state, action) => action.payload
+      }, true),
       tool: handleActions({
         [SELECT_TOOL]: (state, action) => action.payload
       }, Map.tileTypes.WALLED_TILE)

@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import MapCanvas from '../components/MapCanvas';
 import {
-  loadMap, newMap, selectTool, startProposedWall, endProposedWall, commitProposedWall, abortProposedWall
+  loadMap, newMap, selectTool, showGrid, startProposedWall, endProposedWall, commitProposedWall, abortProposedWall
 } from '../actions';
 import Map from '../../lib/Map';
 
@@ -11,7 +11,8 @@ import Map from '../../lib/Map';
   mapResource: state.mapResource,
   workingCopy: state.workingCopy,
   proposedWall: state.proposedWall,
-  tool: state.view.edit.tool
+  tool: state.view.edit.tool,
+  gridShown: state.view.edit.gridShown
 }))
 export default class Editor extends React.Component {
   componentWillMount() {
@@ -25,7 +26,14 @@ export default class Editor extends React.Component {
   }
 
   render() {
-    let { dispatch, mapResource, workingCopy, proposedWall, tool } = this.props;
+    let {
+      dispatch,
+      mapResource,
+      workingCopy,
+      proposedWall,
+      gridShown,
+      tool
+    } = this.props;
     let { mapId } = this.props.params;
 
     if (workingCopy) {
@@ -33,12 +41,13 @@ export default class Editor extends React.Component {
         startProposedWall, endProposedWall, commitProposedWall, abortProposedWall
       }, dispatch);
 
-      let toolNodes = Object.keys(Map.tileTypes).map((toolName) => {
-        let onChange = () => dispatch(selectTool(toolName));
+      let toolNodes = Object.keys(Map.tileTypes).map((typeKey) => {
+        let tileType = Map.tileTypes[typeKey];
+        let onChange = () => dispatch(selectTool(tileType));
         return (
-          <label key={toolName} style={{ display: 'block' }}>
-            <input type="radio" name="tool" value={toolName} defaultChecked={ tool === toolName } onChange={onChange} />
-            { 'TODO: i18n LABEL: ' + toolName }
+          <label key={typeKey} style={{ display: 'block' }}>
+            <input type="radio" name="tool" value={tileType} checked={ tool === tileType } onChange={onChange} />
+            { 'TODO: i18n LABEL: ' + typeKey }
           </label>
         );
       });
@@ -46,14 +55,33 @@ export default class Editor extends React.Component {
       return <div>
         <h1>{ mapId }</h1>
         <div>
-          <MapCanvas map={workingCopy} proposedWall={proposedWall} proposedTileType={tool} {...canvasActions} style={{
-            display: 'inline-block'
-          }}/>
+          <MapCanvas
+            map={workingCopy}
+            proposedWall={proposedWall}
+            proposedTileType={tool}
+            gridShown={gridShown}
+            {...canvasActions}
+            style={{
+              display: 'inline-block'
+            }}
+          />
           <form style={{
             display: 'inline-block',
             marginLeft: 10,
             verticalAlign: 'top'
           }}>
+            <div>
+              <input type="text" />
+            </div>
+            <div>
+              <label>
+                <input type="checkbox"
+                  checked={gridShown}
+                  onChange={ (e) => dispatch(showGrid(e.target.checked)) }
+                />
+                Grid
+              </label>
+            </div>
             <div>{toolNodes}</div>
             <div>
               <button type="button">Undo</button>

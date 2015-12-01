@@ -30,6 +30,7 @@ export const REMOVE_WALL = 'EDIT_REMOVE_WALL';
 export const UNDO = 'EDIT_UNDO';
 export const REDO = 'EDIT_REDO';
 
+export const SHOW_GRID = 'EDIT_SHOW_GRID';
 export const SELECT_TOOL = 'EDIT_SELECT_TOOL';
 
 // TODO: Implement promised map listing
@@ -57,4 +58,5 @@ export const removeWall = createAction(REMOVE_WALL);
 export const undo = createAction(UNDO);
 export const redo = createAction(REDO);
 
+export const showGrid = createAction(SHOW_GRID);
 export const selectTool = createAction(SELECT_TOOL);
