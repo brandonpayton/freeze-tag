@@ -28,3 +28,8 @@ A game of freeze tag.
 * Editor
   * Drag walls
   * Command stack with reversible commands
+
+
+# Misc
+
+* Configure eslint to report missing semicolons
