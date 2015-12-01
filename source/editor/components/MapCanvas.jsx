@@ -70,6 +70,29 @@ class MapCanvas extends React.Component {
     context.fillStyle = '#000';
     context.fillRect(0, 0, canvas.width, canvas.height);
 
+    context.fillStyle = '#AAF';
+
+    map.tiles.forEach((columnList, i) => {
+      columnList.forEach((tile, j) => {
+        if (tile === Map.tileTypes.WALLED_TILE) {
+          context.fillRect(i * columnWidth, j * rowHeight, columnWidth, rowHeight);
+        }
+      })
+    });
+
+    if (proposedWall) {
+      let start = proposedWall.normalizedStart;
+      let end = proposedWall.normalizedEnd;
+
+      context.fillStyle = 'rgba(255, 0, 255, 0.6)';
+      context.fillRect(
+        start.x * columnWidth,
+        start.y * rowHeight,
+        (end.x - start.x) * columnWidth + columnWidth,
+        (end.y - start.y) * rowHeight + rowHeight
+      );
+    }
+
     context.beginPath();
 
     for (let i = 0; i <= numColumns; ++i) {
@@ -84,32 +107,9 @@ class MapCanvas extends React.Component {
       context.lineTo(canvas.width, y);
     }
 
-    context.strokeStyle = 'red';
+    context.strokeStyle = 'gray';
     context.stroke();
     context.closePath();
-
-    context.fillStyle = 'blue';
-
-    map.tiles.forEach((columnList, i) => {
-      columnList.forEach((tile, j) => {
-        if (tile === Map.tileTypes.WALLED_TILE) {
-          context.fillRect(i * columnWidth, j * rowHeight, columnWidth, rowHeight);
-        }
-      })
-    });
-
-    if (proposedWall) {
-      let start = proposedWall.normalizedStart;
-      let end = proposedWall.normalizedEnd;
-
-      context.fillStyle = '#AAF';
-      context.fillRect(
-        start.x * columnWidth,
-        start.y * rowHeight,
-        (end.x - start.x) * columnWidth + columnWidth,
-        (end.y - start.y) * rowHeight + rowHeight
-      );
-    }
   }
 }
 
