@@ -5,7 +5,7 @@ import MapList from '../components/MapList';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-@connect(state => ({ maps: state.maps }))
+@connect(state => ({ mapsResource: state.mapsResource }))
 export default class Index extends React.Component {
 
   componentWillMount() {
@@ -13,21 +13,21 @@ export default class Index extends React.Component {
   }
 
   render() {
-    const { maps, dispatch } = this.props;
+    const { mapsResource, dispatch } = this.props;
     const actionCreators = bindActionCreators({
       selectMap: id => pushState(null, `/map/${id}`)
     }, dispatch);
 
-    if (maps.isPending) {
+    if (mapsResource.isPending) {
       return (
         <div>Loading...</div>
       );
     }
-    else if (maps.data) {
+    else if (mapsResource.data) {
       return (
         <div>
           <MapList
-            maps={ maps.data }
+            maps={ mapsResource.data }
             selectMap={ id => dispatch(pushState(null, `/map/${id}`)) }
             />
           <button type="button"
@@ -36,7 +36,7 @@ export default class Index extends React.Component {
         </div>
       );
     }
-    else if (maps.error) {
+    else if (mapsResource.error) {
       let error = maps.error;
 
       return (

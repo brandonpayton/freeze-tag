@@ -36,7 +36,11 @@ class MapCanvas extends React.Component {
     }
     function onMouseMove(e) {
       if (e.button === 0 && proposedWall) {
-        endProposedWall(eventToPoint(e));
+        let newEnd = eventToPoint(e);
+        if (newEnd.x !== proposedWall.x || newEnd.y !== proposedWall.y) {
+          // Only issue the action when it is redundant
+          endProposedWall(newEnd);
+        }
       }
     }
     function onMouseUp(e) {

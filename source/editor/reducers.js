@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import { handleAction, handleActions } from 'redux-actions';
 import reduceReducers from 'reduce-reducers';
 import { routerStateReducer } from 'redux-router';
+import undoable from 'redux-undo';
 import Map from '../lib/Map';
 
 import {
@@ -50,21 +51,25 @@ export default combineReducers({
       })
     })
   ),
-  workingCopy: handleActions({
-    [asyncActions.toFulfilledActionType(LOAD_MAP)]: (state, action) => action.payload,
-    [NEW_MAP]: (state, action) => new Map(action.payload),
-    [COMMIT_PROPOSED_WALL]: (state, action) => {
-      // TODO: Move to TypeScript so the contract between payload and updateTiles argument is explicit and checked by the compiler
-      let proposal = action.payload;
-      return state.updateTiles({
-        startPoint: proposal.normalizedStart,
-        endPoint: proposal.normalizedEnd,
-        tileType: proposal.tileType
-      });
-    },
-    [UNDO]: (state, action) => state,
-    [REDO]: (state, action) => state
-  }, null),
+  workingCopy: undoable(
+    handleActions({
+      [asyncActions.toFulfilledActionType(LOAD_MAP)]: (state, action) => action.payload,
+      [NEW_MAP]: (state, action) => new Map(action.payload),
+      [COMMIT_PROPOSED_WALL]: (state, action) => {
+        // TODO: Move to TypeScript so the contract between payload and updateTiles argument is explicit and checked by the compiler
+        let proposal = action.payload;
+        return state.updateTiles({
+          startPoint: proposal.normalizedStart,
+          endPoint: proposal.normalizedEnd,
+          tileType: proposal.tileType
+        });
+      }
+    }, null), {
+      filter: (action) => action.type === COMMIT_PROPOSED_WALL,
+      undoType: UNDO,
+      redoType: REDO
+    }
+  ),
   proposedWall: handleActions({
     [START_PROPOSED_WALL]: (state, action) => {
       let start = action.payload;

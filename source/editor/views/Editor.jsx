@@ -3,16 +3,20 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import MapCanvas from '../components/MapCanvas';
 import {
-  loadMap, newMap, selectTool, showGrid, startProposedWall, endProposedWall, commitProposedWall, abortProposedWall
+  loadMap, newMap, selectTool, showGrid,
+  startProposedWall, endProposedWall, commitProposedWall, abortProposedWall,
+  undo, redo
 } from '../actions';
 import Map from '../../lib/Map';
 
 @connect(state => ({
   mapResource: state.mapResource,
-  workingCopy: state.workingCopy,
+  workingCopy: state.workingCopy.present,
   proposedWall: state.proposedWall,
   tool: state.view.edit.tool,
-  gridShown: state.view.edit.gridShown
+  gridShown: state.view.edit.gridShown,
+  canUndo: state.workingCopy.history.past.length > 0,
+  canRedo: state.workingCopy.history.future.length > 0
 }))
 export default class Editor extends React.Component {
   componentWillMount() {
@@ -32,6 +36,8 @@ export default class Editor extends React.Component {
       workingCopy,
       proposedWall,
       gridShown,
+      canUndo,
+      canRedo,
       tool
     } = this.props;
     let { mapId } = this.props.params;
@@ -84,8 +90,8 @@ export default class Editor extends React.Component {
             </div>
             <div>{toolNodes}</div>
             <div>
-              <button type="button">Undo</button>
-              <button type="button">Redo</button>
+              <button type="button" disabled={!canUndo} onClick={ () => dispatch(undo()) }>Undo</button>
+              <button type="button" disabled={!canRedo} onClick={ () => dispatch(redo()) }>Redo</button>
             </div>
           </form>
         </div>

@@ -3,15 +3,16 @@ import thunk from 'redux-thunk';
 import { reduxReactRouter } from 'redux-router';
 import createHistory from 'history/lib/createHashHistory';
 // Redux DevTools store enhancers
-import { devTools, persistState } from 'redux-devtools';
+import DevTools from './components/DevTools';
+import { persistState } from 'redux-devtools';
 import rootReducer from './reducers';
 
 const createStoreWithMiddleware = compose(
   applyMiddleware(thunk),
   reduxReactRouter({ createHistory }),
-  devTools(),
+  DevTools.instrument(),
   // Lets you write ?debug_session=<name> in address bar to persist debug sessions
-  persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
+  //persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
 )(createStore);
 
 export default function configureStore(initialState) {
