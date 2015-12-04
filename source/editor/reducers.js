@@ -47,7 +47,8 @@ export default combineReducers({
     }),
     asyncActions.createReducer(LOAD_MAP, {
       data: handleActions({
-        [SAVE_MAP]: (state, action) => action.payload
+        [SAVE_MAP]: (state, action) => {
+        }
       })
     })
   ),

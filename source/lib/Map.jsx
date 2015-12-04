@@ -12,13 +12,15 @@ export default class Map {
 
   constructor({ numColumns, numRows, tiles }) {
     function createTileList(numColumns, numRows) {
-      let defaultColumn = Immutable.List.of(new Array(numColumns).fill(false));
+      let defaultColumn = Immutable.List.of(new Array(numColumns).fill(Map.tileTypes.EMPTY_TILE));
       return new Immutable.List(new Array(numRows).fill(defaultColumn));
     }
 
     this.numColumns = numColumns;
     this.numRows = numRows;
-    this.tiles = tiles || createTileList(numColumns, numRows);
+    this.tiles = tiles
+      ? Immutable.fromJS(tiles)
+      : createTileList(numColumns, numRows);
   }
 
   updateTiles({ startPoint, endPoint, tileType }) {
@@ -56,5 +58,13 @@ export default class Map {
       wrapToRange(position.x, 0, this.numColumns),
       wrapToRange(position.y, 0, this.numRows)
     );
+  }
+
+  toJSON() {
+    return {
+      numColumns: this.numColumns,
+      numRows: this.numRows,
+      tiles: this.tiles.toJSON()
+    };
   }
 }

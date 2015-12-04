@@ -5,7 +5,7 @@ import MapCanvas from '../components/MapCanvas';
 import {
   loadMap, newMap, selectTool, showGrid,
   startProposedWall, endProposedWall, commitProposedWall, abortProposedWall,
-  undo, redo
+  undo, redo, saveMap
 } from '../actions';
 import Map from '../../lib/Map';
 
@@ -58,43 +58,50 @@ export default class Editor extends React.Component {
         );
       });
 
+      let performSave = () => dispatch(saveMap({
+        name: this.refs.name.value,
+        data: workingCopy
+      }));
+
       return <div>
-        <h1>{ mapId }</h1>
-        <div>
-          <MapCanvas
-            map={workingCopy}
-            proposedWall={proposedWall}
-            proposedTileType={tool}
-            gridShown={gridShown}
-            {...canvasActions}
-            style={{
-              display: 'inline-block'
-            }}
-          />
-          <form style={{
-            display: 'inline-block',
-            marginLeft: 10,
-            verticalAlign: 'top'
-          }}>
-            <div>
-              <input type="text" />
-            </div>
-            <div>
-              <label>
-                <input type="checkbox"
-                  checked={gridShown}
-                  onChange={ (e) => dispatch(showGrid(e.target.checked)) }
-                />
-                Grid
-              </label>
-            </div>
-            <div>{toolNodes}</div>
-            <div>
-              <button type="button" disabled={!canUndo} onClick={ () => dispatch(undo()) }>Undo</button>
-              <button type="button" disabled={!canRedo} onClick={ () => dispatch(redo()) }>Redo</button>
-            </div>
-          </form>
-        </div>
+        <MapCanvas
+          map={workingCopy}
+          proposedWall={proposedWall}
+          proposedTileType={tool}
+          gridShown={gridShown}
+          {...canvasActions}
+          style={{
+            display: 'inline-block'
+          }}
+        />
+        <form style={{
+          display: 'inline-block',
+          marginLeft: 10,
+          verticalAlign: 'top'
+        }}>
+          <div>
+            <input type="text" ref="name" value={mapId} />
+          </div>
+          <div>
+            <label>
+              <input type="checkbox"
+                checked={gridShown}
+                onChange={ (e) => dispatch(showGrid(e.target.checked)) }
+              />
+              Grid
+            </label>
+          </div>
+          <div>{toolNodes}</div>
+          <div>
+            <button type="button" disabled={!canUndo} onClick={ () => dispatch(undo()) }>Undo</button>
+            <button type="button" disabled={!canRedo} onClick={ () => dispatch(redo()) }>Redo</button>
+          </div>
+          <div>
+            <button type="button"
+              disabled={ workingCopy === mapResource.data }
+              onClick={ performSave }>Save</button>
+          </div>
+        </form>
       </div>;
     }
     else if (mapResource.isPending) {

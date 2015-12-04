@@ -37,7 +37,7 @@ export default class Index extends React.Component {
       );
     }
     else if (mapsResource.error) {
-      let error = maps.error;
+      let error = mapsResource.error;
 
       return (
         <div>Error: {error}</div>

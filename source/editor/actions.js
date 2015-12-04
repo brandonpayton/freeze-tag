@@ -2,11 +2,12 @@ import { createAction } from 'redux-actions';
 import asyncActions from '../lib/async-actions';
 import rest from 'rest';
 import mime from 'rest/interceptor/mime';
+import Map from '../lib/Map';
 
 let client = rest.wrap(mime);
 
 let fetch = path => client({ path }).then(response => response.entity);
-let put = ({ path, entity }) => client({
+let put = (path, entity) => client({
 	method: 'PUT',
 	path,
 	headers: {
@@ -35,7 +36,10 @@ export const SELECT_TOOL = 'EDIT_SELECT_TOOL';
 
 // TODO: Implement promised map listing
 export const listMaps = asyncActions.createCreator(LIST_MAPS, () => {
-  return fetch('/api/maps').then(mapsData => mapsData.map(mapData => new Map(mapData)));
+  return fetch('/api/maps').then(mapsData => mapsData.map(({ name, data }) => ({
+    name: name,
+    map: new Map(data)
+  })));
 });
 
 // TODO: Implement promised map load
