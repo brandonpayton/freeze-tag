@@ -37,6 +37,8 @@ function normalizeProposedWall(wallPoints) {
   }
 }
 
+const LOAD_MAP_FULFILLED = asyncActions.toFulfilledActionType(LOAD_MAP);
+
 export default combineReducers({
   router: routerStateReducer,
   mapsResource: asyncActions.createReducer(LIST_MAPS),
@@ -54,7 +56,7 @@ export default combineReducers({
   ),
   workingCopy: undoable(
     handleActions({
-      [asyncActions.toFulfilledActionType(LOAD_MAP)]: (state, action) => action.payload,
+      [LOAD_MAP_FULFILLED]: (state, action) => action.payload,
       [NEW_MAP]: (state, action) => new Map(action.payload),
       [COMMIT_PROPOSED_WALL]: (state, action) => {
         // TODO: Move to TypeScript so the contract between payload and updateTiles argument is explicit and checked by the compiler
@@ -66,6 +68,7 @@ export default combineReducers({
         });
       }
     }, null), {
+      initTypes: [ '@@redux/INIT', '@@INIT', LOAD_MAP_FULFILLED ],
       filter: (action) => action.type === COMMIT_PROPOSED_WALL,
       undoType: UNDO,
       redoType: REDO
