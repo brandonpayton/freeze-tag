@@ -18,7 +18,8 @@ import {
 	UNDO,
 	REDO,
   SHOW_GRID,
-  SELECT_TOOL
+  SELECT_TOOL,
+  REFLECT_WINDOW_SIZE
 } from './actions';
 
 function normalizeProposedWall(wallPoints) {
@@ -41,6 +42,14 @@ const LOAD_MAP_FULFILLED = asyncActions.toFulfilledActionType(LOAD_MAP);
 
 export default combineReducers({
   router: routerStateReducer,
+  environment: combineReducers({
+    window: handleActions({
+      [REFLECT_WINDOW_SIZE]: (state, action) => action.payload
+    }, {
+      innerWidth: window.innerWidth,
+      innerHeight: window.innerHeight
+    })
+  }),
   mapsResource: asyncActions.createReducer(LIST_MAPS),
   mapResource: reduceReducers(
     // Clear the resource state when the route changes so it is reinitialized to the resource default
@@ -101,5 +110,15 @@ export default combineReducers({
         [SELECT_TOOL]: (state, action) => action.payload
       }, Map.tileTypes.WALLED_TILE)
     })
+  }),
+  i18n: handleActions({
+    // TODO: Sort out how to actually approach i18n
+  }, {
+    grid: 'Grid',
+    EMPTY_TILE: 'Empty tile',
+    WALLED_TILE: 'Wall tile',
+    undo: 'Undo',
+    redo: 'Redo',
+    save: 'Save'
   })
 });

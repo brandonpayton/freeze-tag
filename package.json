@@ -18,6 +18,7 @@
     "isomorphic-fetch": "^2.1.1",
     "keycode": "^2.0.0",
     "kld-affine": "^0.1.0",
+    "lodash": "^3.10.1",
     "most": "^0.12.0",
     "normalizr": "^1.0.0",
     "react": "^0.14.3",

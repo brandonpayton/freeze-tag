@@ -16,7 +16,8 @@ import Map from '../../lib/Map';
   tool: state.view.edit.tool,
   gridShown: state.view.edit.gridShown,
   canUndo: state.workingCopy.history.past.length > 0,
-  canRedo: state.workingCopy.history.future.length > 0
+  canRedo: state.workingCopy.history.future.length > 0,
+  i18n: state.i18n
 }))
 export default class Editor extends React.Component {
   componentWillMount() {
@@ -38,7 +39,8 @@ export default class Editor extends React.Component {
       gridShown,
       canUndo,
       canRedo,
-      tool
+      tool,
+      i18n
     } = this.props;
     let { mapId } = this.props.params;
 
@@ -53,7 +55,7 @@ export default class Editor extends React.Component {
         return (
           <label key={typeKey} style={{ display: 'block' }}>
             <input type="radio" name="tool" value={tileType} checked={ tool === tileType } onChange={onChange} />
-            { 'TODO: i18n LABEL: ' + typeKey }
+            { i18n[typeKey] }
           </label>
         );
       });
@@ -80,7 +82,7 @@ export default class Editor extends React.Component {
           verticalAlign: 'top'
         }}>
           <div>
-            <input type="text" ref="name" value={mapId} />
+            <input type="text" ref="name" defaultValue={mapId} />
           </div>
           <div>
             <label>
@@ -93,13 +95,13 @@ export default class Editor extends React.Component {
           </div>
           <div>{toolNodes}</div>
           <div>
-            <button type="button" disabled={!canUndo} onClick={ () => dispatch(undo()) }>Undo</button>
-            <button type="button" disabled={!canRedo} onClick={ () => dispatch(redo()) }>Redo</button>
+            <button type="button" disabled={!canUndo} onClick={ () => dispatch(undo()) }>{i18n.undo}</button>
+            <button type="button" disabled={!canRedo} onClick={ () => dispatch(redo()) }>{i18n.redo}</button>
           </div>
           <div>
             <button type="button"
               disabled={ workingCopy === mapResource.data }
-              onClick={ performSave }>Save</button>
+              onClick={ performSave }>{i18n.save}</button>
           </div>
         </form>
       </div>;

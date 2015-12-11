@@ -34,6 +34,8 @@ export const REDO = 'EDIT_REDO';
 export const SHOW_GRID = 'EDIT_SHOW_GRID';
 export const SELECT_TOOL = 'EDIT_SELECT_TOOL';
 
+export const REFLECT_WINDOW_SIZE = 'REFLECT_WINDOW_SIZE';
+
 // TODO: Implement promised map listing
 export const listMaps = asyncActions.createCreator(LIST_MAPS, () => {
   return fetch('/api/maps').then(mapsData => mapsData.map(({ name, data }) => ({
@@ -64,3 +66,5 @@ export const redo = createAction(REDO);
 
 export const showGrid = createAction(SHOW_GRID);
 export const selectTool = createAction(SELECT_TOOL);
+
+export const reflectWindowSize = createAction(REFLECT_WINDOW_SIZE);
